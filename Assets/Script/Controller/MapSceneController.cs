@@ -22,6 +22,8 @@ public class MapSceneController : MonoBehaviour
 	public Sprite imgArmor;
 	public Sprite imgBox;
     public User usr;
+    public GameObject armrEquip;
+    public GameObject weapEquip;
 
 
     private void Awake()
@@ -207,6 +209,9 @@ public class MapSceneController : MonoBehaviour
         response = www.downloadHandler.text;
         print(response);
         StartCoroutine(GetSlots());
+        weapEquip.SetActive(true);
+        yield return new WaitForSeconds(1);
+        weapEquip.SetActive(false);
     }
 
     IEnumerator EquipArmor(string id, string email)
@@ -220,6 +225,9 @@ public class MapSceneController : MonoBehaviour
         response = www.downloadHandler.text;
         print(response);
         StartCoroutine(GetSlots());
+        armrEquip.SetActive(true);
+        yield return new WaitForSeconds(1);
+        armrEquip.SetActive(false);
     }
 
     public void OnClicked(Button button)
