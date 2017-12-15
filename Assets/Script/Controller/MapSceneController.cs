@@ -293,6 +293,7 @@ public class MapSceneController : MonoBehaviour
     public void OnSignOut(Button button)
     {
         SceneManager.LoadScene("Main");
+        //Test
     }
 
 }
