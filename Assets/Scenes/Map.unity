@@ -2985,9 +2985,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87e28ec8f800b848909c8112669ee63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitSpawnTime: 5
-  minIntervalTime: 5
-  maxIntervalTime: 10
+  waitSpawnTime: 20
+  minIntervalTime: 20
+  maxIntervalTime: 60
 --- !u!4 &291003055
 Transform:
   m_ObjectHideFlags: 0
