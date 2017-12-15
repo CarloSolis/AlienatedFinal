@@ -34,11 +34,11 @@ public class CreateUserController : MonoBehaviour {
             form.AddField("username", username.text.ToString());
             form.AddField("email", email.text.ToString());
             form.AddField("password", password.text.ToString());
-            print(password.text.ToString());
-
+       
             UnityWebRequest www = UnityWebRequest.Post("http://alienated.eastus2.cloudapp.azure.com:8080/user/add", form);
             yield return www.SendWebRequest();
             status = www.downloadHandler.text;
+			print (status);
 
             if (status.Equals("Successful")){
                 print("Correcto");

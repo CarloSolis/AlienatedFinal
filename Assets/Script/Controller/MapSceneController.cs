@@ -16,15 +16,15 @@ public class MapSceneController : MonoBehaviour
     private int o = 1;
     private string response;
     public Sprite imgCoke;
-	public Sprite imgPork;
-	public Sprite imgBullet;
-	public Sprite imgWeapon;
-	public Sprite imgArmor;
-	public Sprite imgBox;
+    public Sprite imgPork;
+    public Sprite imgBullet;
+    public Sprite imgWeapon;
+    public Sprite imgArmor;
+    public Sprite imgBox;
+	public Sprite imgEmpt;
     public User usr;
     public GameObject armrEquip;
     public GameObject weapEquip;
-
 
     private void Awake()
     {
@@ -53,19 +53,21 @@ public class MapSceneController : MonoBehaviour
         foreach (Slot slt in usr.Inventory.GetListOfSlots())
         {
 
+			Image img = GameObject.Find("Image (" + i + ")").GetComponent<Image>();
+
             if (slt.Item == null)
             {
                 Button[] btns = (Button[])GameObject.Find("iTems (" + i + ")").GetComponentsInChildren<Button>();
 
                 // Name and Quantity
                 btns[0].GetComponentsInChildren<Text>()[0].text = "Empty";
-				btns[0].GetComponentsInChildren<Text>()[1].text = "None";
+                btns[0].GetComponentsInChildren<Text>()[1].text = "None";
                 btns[0].GetComponentsInChildren<Text>()[2].text = "0";
 
-                if (btns.Length > 1)
-                {
-                    btns[1].gameObject.SetActive(false);
-                }
+				if (btns.Length > 1) {
+					btns [1].gameObject.SetActive (false);
+					img.overrideSprite = imgEmpt;
+				} 
 
             }
             else
@@ -78,43 +80,52 @@ public class MapSceneController : MonoBehaviour
                 btns[0].GetComponentsInChildren<Text>()[1].text = slt.ItemClassType.ToString();
                 btns[0].GetComponentsInChildren<Text>()[2].text = slt.Quantity.ToString();
                 btns[0].GetComponentsInChildren<Text>()[3].text = slt.Item.ID.ToString();
+				btns[0].GetComponentsInChildren<Text>()[4].text = slt.ID.ToString();
 
                 // Delete button
                 btns[1].GetComponentsInChildren<Text>()[0].text = slt.ID.ToString();
 
-                Image img = GameObject.Find("Image (" + i + ")").GetComponent<Image>();
+                
 
 
                 if (slt.ItemClassType.Equals("Consumable") && slt.Item.Name.Equals("Pork"))
                 {
-					img.overrideSprite = imgPork;
+                    img.overrideSprite = imgPork;
 
                 }
                 else if (slt.ItemClassType.Equals("Consumable") && slt.Item.Name.Equals("Coke"))
                 {
 
-					img.overrideSprite = imgCoke;
+                    img.overrideSprite = imgCoke;
 
                 }
                 else if (slt.ItemClassType.Equals("Bullet"))
                 {
 
-					img.overrideSprite = imgBullet;
+                    img.overrideSprite = imgBullet;
 
-				}else if (slt.ItemClassType.Equals("Weapon"))
+                }
+                else if (slt.ItemClassType.Equals("Weapon"))
+                {
+
+                    img.overrideSprite = imgWeapon;
+
+                }
+                else if (slt.ItemClassType.Equals("Armor"))
+                {
+
+                    img.overrideSprite = imgArmor;
+
+                }
+                else if (slt.ItemClassType.Equals("LootCrate"))
+                {
+
+                    img.overrideSprite = imgBox;
+
+				}else
 				{
 
-					img.overrideSprite = imgWeapon;
-
-				}else if (slt.ItemClassType.Equals("Armor"))
-				{
-
-					img.overrideSprite = imgArmor;
-
-				}else if (slt.ItemClassType.Equals("Loot crate"))
-				{
-
-					img.overrideSprite = imgBox;
+					img.overrideSprite = imgEmpt;
 
 				}
 
@@ -230,6 +241,20 @@ public class MapSceneController : MonoBehaviour
         armrEquip.SetActive(false);
     }
 
+    IEnumerator EquipLoot(string id, string email)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+		form.AddField("slotid", id);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://alienated.eastus2.cloudapp.azure.com:8080/inventory/opencrate", form);
+        yield return www.SendWebRequest();
+        response = www.downloadHandler.text;
+        print(response);
+        StartCoroutine(GetSlots());
+   
+    }
+
     public void OnClicked(Button button)
     {
         StartCoroutine(DeleteItem(button.GetComponentInChildren<Text>().text));
@@ -249,6 +274,12 @@ public class MapSceneController : MonoBehaviour
         {
 
             StartCoroutine(EquipArmor(btns.GetComponentsInChildren<Text>()[3].text.ToString(), usr.Email.ToString()));
+
+        }
+        else if (type == "LootCrate")
+        {
+
+            StartCoroutine(EquipLoot(btns.GetComponentsInChildren<Text>()[4].text.ToString(), usr.Email.ToString()));
 
         }
         else
