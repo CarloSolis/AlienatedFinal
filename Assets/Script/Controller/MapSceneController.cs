@@ -25,6 +25,7 @@ public class MapSceneController : MonoBehaviour
     public User usr;
     public GameObject armrEquip;
     public GameObject weapEquip;
+    public Text lvl;
 
     private void Awake()
     {
@@ -84,8 +85,6 @@ public class MapSceneController : MonoBehaviour
 
                 // Delete button
                 btns[1].GetComponentsInChildren<Text>()[0].text = slt.ID.ToString();
-
-                
 
 
                 if (slt.ItemClassType.Equals("Consumable") && slt.Item.Name.Equals("Pork"))
@@ -150,6 +149,8 @@ public class MapSceneController : MonoBehaviour
             btnArmr2[0].GetComponentsInChildren<Text>()[0].text = usr.ArmorSet.Chest.Durability.ToString();
             Button[] btnArmr3 = (Button[])GameObject.Find("Armor3").GetComponentsInChildren<Button>();
             btnArmr3[0].GetComponentsInChildren<Text>()[0].text = usr.ArmorSet.Legs.Durability.ToString();
+
+            lvl.text = usr.Lvl.Lvl.ToString();
 
         }
         catch (Exception e)

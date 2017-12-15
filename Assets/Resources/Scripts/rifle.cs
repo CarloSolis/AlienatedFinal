@@ -69,7 +69,7 @@ public class rifle : MonoBehaviour {
     {
         foreach (Slot slt in user.Inventory.GetListOfSlots())
         {
-            if (slt.Item.Name == "7.76mm")
+            if (slt.Item.Name == "5.56mm")
             {
                 bulletsLeft = slt.Quantity;
                 idItem = slt.Item.ID;

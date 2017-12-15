@@ -13,6 +13,7 @@ public class CreateUserController : MonoBehaviour {
     public InputField confPass;
     public Button Enter;
     private string status;
+    public GameObject nwUsr;
 
     void Start()
     {
@@ -43,7 +44,11 @@ public class CreateUserController : MonoBehaviour {
             if (status.Equals("Successful")){
                 print("Correcto");
 
+                nwUsr.SetActive(true);
+                yield return new WaitForSeconds(1);
+
                 LoadByIndex(0);
+                nwUsr.SetActive(false);
 
             }else{
                 print("Equivocado");
